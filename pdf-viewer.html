@@ -133,7 +133,7 @@
 
     const params = new URLSearchParams(location.search);
     const relPath = params.get('path') || '';
-    const pdfUrl = '../q/' + encodeURIComponent(relPath);
+    const pdfUrl = './q/' + encodeURIComponent(relPath);
 
     document.getElementById('fileName').textContent = relPath.split('/').pop();
 
