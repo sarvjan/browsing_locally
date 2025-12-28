@@ -170,7 +170,8 @@
         style="padding:12px;border-bottom:1px solid #f3f7ff;display:flex;align-items:center;justify-content:space-between">
         <div style="display:flex;flex-direction:column">
           <strong style="font-size:16px">Questions <span
-              style="font-weight:400;color:var(--muted);font-size:14px">(<span id="totalCount">0</span>)</span></strong>
+              style="font-weight:400;color:var(--muted);font-size:14px">(<span id="seenCount">0</span>/<span
+                id="totalCount">0</span>)</span></strong>
         </div>
         <div style="display:flex;gap:8px">
           <button id="markAllUnreadBtn" class="navBtn"
@@ -339,7 +340,17 @@
         readQuestions[path] = true;
       }
       saveReadStatus();
+      updateCounts();
       renderTiles(flatFiles);
+    }
+
+    function updateCounts() {
+      let seen = 0;
+      for (const f of flatFiles) {
+        if (readQuestions[f.path]) seen++;
+      }
+      document.getElementById('seenCount').textContent = seen;
+      document.getElementById('totalCount').textContent = flatFiles.length;
     }
 
     function updateViewerFlagBtn() {
@@ -379,6 +390,7 @@
       // Clear all read questions
       readQuestions = {};
       saveReadStatus();
+      updateCounts();
       renderTiles(flatFiles);
     });
 
@@ -419,7 +431,7 @@
 
       // open PDFs in the custom PDF.js viewer (no sidebar)
       if (f.mime === 'application/pdf') {
-        iframe.src = './pdf-viewer.html?v=1766860594335&path=' + encodeURIComponent(f.path);
+        iframe.src = './pdf-viewer.html?v=1766939835414&path=' + encodeURIComponent(f.path);
       } else {
         iframe.src = './q/' + encodeURIComponent(f.path);
       }
@@ -477,7 +489,9 @@
 
         loadFromStorage(); // Load flags and read status from localStorage
 
-        document.getElementById('totalCount').textContent = flatFiles.length;
+        loadFromStorage(); // Load flags and read status from localStorage
+
+        updateCounts();
         renderTiles(flatFiles);
         if (flatFiles.length) openInViewer(0);
       } catch (err) {
