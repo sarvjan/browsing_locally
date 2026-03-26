@@ -6,14 +6,14 @@ import re
 import os
 from os.path import exists
 
-filename = "abc.txt"
+filename = "complete_list.txt"
 brand = "google"
 if (os.path.exists(filename)):
     os.remove(filename)
 
 results = []
 
-def collect_urls(page):
+def collect_urls(page, f):
     url = f"https://www.examtopics.com/discussions/{brand}/{page}"
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -32,11 +32,10 @@ def collect_urls(page):
         results.append(link)
 
 
-f = open(filename, "a")
-for page in range(0,176):
-    collect_urls(page)
-    page= page + 1
-f.close()
+with open(filename, "a") as f:
+    for page in range(0, 176):
+        collect_urls(page, f)
+        f.flush()
 
 
 # results.sort()
